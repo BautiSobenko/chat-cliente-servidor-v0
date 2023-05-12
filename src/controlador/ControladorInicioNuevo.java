@@ -53,6 +53,14 @@ public class ControladorInicioNuevo implements ActionListener {
         this.vista.lanzarVentanaEmergente(msg);
     }
 
+    public void error(String msg) {
+        this.vista.error(msg);
+    }
+
+    public void limpiarCampos(){
+        this.vista.limpiarCampo();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -68,8 +76,8 @@ public class ControladorInicioNuevo implements ActionListener {
                 String ipDestino = vista.getIP();
                 int puertoDestino = vista.getPuerto();
 
-                if( puertoDestino != this.miPuerto) {
-	                this.vista.limpiarCampo();
+                if( puertoDestino != this.miPuerto ) {
+	                this.limpiarCampos();
 	                try {
                         this.cliente.setIpDestino(ipDestino);
                         this.cliente.setPuertoDestino(puertoDestino);
@@ -78,7 +86,7 @@ public class ControladorInicioNuevo implements ActionListener {
 
                         this.cliente.enviaMensaje("LLAMADA");
 
-                        vista.lanzarVentanaEmergente("Esperando a ser atendido...");
+                        this.lanzarAviso("Esperando a ser atendido...");
 
                     }catch (Exception exception){
                         exception.printStackTrace();

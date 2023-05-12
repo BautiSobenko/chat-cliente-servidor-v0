@@ -141,7 +141,7 @@ public class Cliente implements Runnable {
                     ControladorSesionLlamada.get(true);
                 }else if( txt.equalsIgnoreCase("DESCONECTAR") ){
                     ControladorSesionLlamada.get(false).esconderVista();
-                    ControladorInicioNuevo.get(true);
+                    ControladorInicioNuevo.get(true).limpiarCampos();
 
                 }else{
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + txt);

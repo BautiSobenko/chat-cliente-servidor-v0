@@ -55,6 +55,7 @@ public class ControladorRecepcionLlamada implements ActionListener {
 
             case("Rechazar"):
                 this.vista.esconder();
+                ControladorInicioNuevo.get(true).limpiarCampos();
             break;
         }
     }

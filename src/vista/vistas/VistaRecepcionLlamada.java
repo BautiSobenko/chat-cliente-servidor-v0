@@ -65,7 +65,7 @@ public class VistaRecepcionLlamada extends JFrame implements IVistaRecepcionLlam
 		
 		lblIP = new JLabel("");
 		lblIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblIP.setBounds(76, 25, 466, 36);
+		lblIP.setBounds(118, 23, 370, 36);
 		contentPane.add(lblIP);
 		
 		JLabel lblNewLabel_1 = new JLabel("\u00BFDesea conectar?");

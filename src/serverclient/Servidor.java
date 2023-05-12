@@ -68,7 +68,7 @@ public class Servidor implements Runnable {
 
                 if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(puertoDestino)){
 
-                    ControladorInicioNuevo.get(false).lanzarAviso("No es posible conectar. Ocupado");
+                    ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
 
                 }else{
 

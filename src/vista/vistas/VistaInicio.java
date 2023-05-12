@@ -129,8 +129,6 @@ public class VistaInicio extends JFrame implements IVistaInicio {
 		this.txtPuerto.setText("");
 	}
 
-
-
 	@Override
 	public void mostrar() {
 		this.setVisible(true);
