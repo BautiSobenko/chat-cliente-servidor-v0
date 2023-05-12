@@ -1,5 +1,6 @@
 package serverclient;
 
+import controlador.ControladorInicioNuevo;
 import mensaje.Mensaje;
 import vista.vistas.VistaServidor;
 
@@ -9,18 +10,21 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 
 public class Servidor implements Runnable {
 
     private int puertoServer;
     private static Servidor servidor = null;
     private VistaServidor vistaServidor;
+    private HashSet<Integer> conexiones;
 
     private Servidor(){
         this.puertoServer = 9090; //Si no lo seteo antes, se rompe, intenta abrir ServerSocket con puerto des escucha null
         this.vistaServidor = new VistaServidor();
         Thread hiloServer = new Thread(this);
         hiloServer.start();
+        conexiones = new HashSet<>();
     }
 
     public static Servidor getServer(){
@@ -42,6 +46,7 @@ public class Servidor implements Runnable {
 
             String ipOrigen, ipDestino, msg;
             int puertoDestino;
+            int puertoOrigen;
             Socket soc;
             Mensaje mensaje;
 
@@ -56,21 +61,39 @@ public class Servidor implements Runnable {
                 System.out.println(mensaje);
 
                 puertoDestino = mensaje.getPuertoDestino();
+                puertoOrigen = mensaje.getPuertoOrigen();
                 ipOrigen = mensaje.getIpOrigen();
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " : " + msg + "\n");
+                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(puertoDestino)){
 
-                Socket enviaDestinatario = new Socket(ipDestino, puertoDestino);
+                    ControladorInicioNuevo.get(false).lanzarAviso("No es posible conectar. Ocupado");
 
-                ObjectOutputStream out = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                }else{
 
-                out.writeObject(mensaje);
+                    if( msg.equalsIgnoreCase("LLAMADA ACEPTADA") ){
+                        this.conexiones.add(puertoDestino);
+                        this.conexiones.add(puertoOrigen);
+                    }
+                    if( msg.equalsIgnoreCase("DESCONECTAR") ){
+                        this.conexiones.remove(puertoDestino);
+                        this.conexiones.remove(puertoOrigen);
+                    }
 
-                enviaDestinatario.close();
+                    this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " : " + msg + "\n");
+
+                    Socket enviaDestinatario = new Socket(ipDestino, puertoDestino);
+
+                    ObjectOutputStream out = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+
+                    out.writeObject(mensaje);
+
+                    enviaDestinatario.close();
+                }
 
                 soc.close();
+
             }
 
 

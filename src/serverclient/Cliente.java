@@ -109,8 +109,6 @@ public class Cliente implements Runnable {
     public void run() {
         try {
 
-            System.out.println(puertoOrigen);
-
             ssCliente = new ServerSocket(this.puertoOrigen);
 
             System.out.println("Escuchando desde puerto: " + this.puertoOrigen);
@@ -118,6 +116,7 @@ public class Cliente implements Runnable {
             String ipD, ipO, txt;
             Socket soc;
             Mensaje msg;
+
             while(true) {
 
                 soc = ssCliente.accept();
@@ -143,12 +142,13 @@ public class Cliente implements Runnable {
                 }else if( txt.equalsIgnoreCase("DESCONECTAR") ){
                     ControladorSesionLlamada.get(false).esconderVista();
                     ControladorInicioNuevo.get(true);
+
                 }else{
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + txt);
-
                 }
 
                 soc.close();
+
             }
 
         } catch (IOException e) {

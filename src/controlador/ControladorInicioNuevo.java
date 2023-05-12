@@ -49,6 +49,10 @@ public class ControladorInicioNuevo implements ActionListener {
         return controladorInicio;
     }
 
+    public void lanzarAviso(String msg){
+        this.vista.lanzarVentanaEmergente(msg);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 

@@ -120,7 +120,7 @@ public class VistaInicio extends JFrame implements IVistaInicio {
 
 	@Override
 	public void lanzarVentanaEmergente(String mensaje) {
-		JOptionPane.showMessageDialog(this,mensaje);
+		JOptionPane.showMessageDialog(this,mensaje,"Aviso",JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
