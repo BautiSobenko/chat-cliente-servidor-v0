@@ -3,6 +3,7 @@ package serverclient;
 import controlador.ControladorInicioNuevo;
 import controlador.ControladorRecepcionLlamada;
 import controlador.ControladorSesionLlamada;
+import encriptacion.RSA;
 import mensaje.Mensaje;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.PublicKey;
 
 public class Cliente implements Runnable {
 
@@ -25,8 +27,12 @@ public class Cliente implements Runnable {
     private String ipServer;
     private String ipDestino;
     private String ipOrigen;
+    private final RSA rsa;
+
+    private PublicKey publicKeyExtremo;
 
     private Cliente(){
+        this.rsa = new RSA();
     }
 
     public static Cliente getCliente() {
@@ -45,12 +51,19 @@ public class Cliente implements Runnable {
 
             InetAddress adress = InetAddress.getLocalHost(); //Obtengo la ip origen (Informacion extra)
             this.ipOrigen = adress.getHostAddress();
-
             mensaje.setPuertoOrigen(this.puertoOrigen);
             mensaje.setIpOrigen(this.ipOrigen);
             mensaje.setIpDestino(this.ipDestino);
             mensaje.setPuertoDestino(this.puertoDestino);
-            mensaje.setMensaje(msg);
+
+            //Ante mensaje de "Aviso" no debo cifrarlos
+            if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") ) {
+                mensaje.setMensaje(msg);
+                if (msg.equals("LLAMADA"))
+                    mensaje.setPublicKey(this.rsa.getPublicKey()); //Cuando yo llamo, ya envio mi clave publica (puede aceptarme)
+            }else{
+                mensaje.setMensaje( this.rsa.encriptar(msg, this.publicKeyExtremo) ); //Encripto con la llave publica que me envio
+            }
 
             ObjectOutputStream out = new ObjectOutputStream(sCliente.getOutputStream());
             out.writeObject(mensaje);
@@ -62,6 +75,8 @@ public class Cliente implements Runnable {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -81,14 +96,13 @@ public class Cliente implements Runnable {
                 this.puertoDestino = puertoDestino;
                 this.ipDestino = ipDestino;
 
+                mensaje.setPublicKey(this.rsa.getPublicKey()); //Acepte la llamada, le envio mi clave publica al extremo para comenzar a intercambiar mensajes
                 mensaje.setPuertoDestino(puertoDestino);
                 mensaje.setIpDestino(ipDestino);
                 mensaje.setMensaje(msg);
                 mensaje.setIpOrigen(this.ipOrigen);
                 mensaje.setPuertoOrigen(this.puertoOrigen);
             }
-
-            System.out.println(mensaje);
 
             ObjectOutputStream out = new ObjectOutputStream(sCliente.getOutputStream());
             out.writeObject(mensaje);
@@ -136,15 +150,19 @@ public class Cliente implements Runnable {
                     controladorRecepcionLlamada.setPuertoDestino(msg.getPuertoOrigen()); //Puerto Del que me envio ese mensaje
                     controladorRecepcionLlamada.actualizarLabelIP(ipO);
                     ControladorRecepcionLlamada.get(true);
+                    this.publicKeyExtremo = msg.getPublicKey(); //Recibo clave publica del extremo (puedo aceptar la llamada)
                 }else if( txt.equalsIgnoreCase("LLAMADA ACEPTADA") ){
+                    this.publicKeyExtremo = msg.getPublicKey(); //Recibo la clave publica del extremo que acepto mi llamada
                     ControladorInicioNuevo.get(false);
                     ControladorSesionLlamada.get(true);
                 }else if( txt.equalsIgnoreCase("DESCONECTAR") ){
                     ControladorSesionLlamada.get(false).esconderVista();
+                    ControladorSesionLlamada.get(false).borrarHistorial();
                     ControladorInicioNuevo.get(true).limpiarCampos();
-
+                    this.publicKeyExtremo = null;
                 }else{
-                    ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + txt);
+                    String mensajeDesencriptado = this.rsa.desencriptar(txt); //Lo desencripto con mi clave privada. El extremo encripto con mi clave publica (enviada)
+                    ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
                 }
 
                 soc.close();
@@ -154,6 +172,8 @@ public class Cliente implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

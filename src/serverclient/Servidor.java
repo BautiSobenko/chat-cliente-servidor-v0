@@ -81,7 +81,7 @@ public class Servidor implements Runnable {
                         this.conexiones.remove(puertoOrigen);
                     }
 
-                    this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " : " + msg + "\n");
+                    this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " :\n" + msg + "\n\n");
 
                     Socket enviaDestinatario = new Socket(ipDestino, puertoDestino);
 

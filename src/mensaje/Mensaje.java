@@ -1,6 +1,7 @@
 package mensaje;
 
 import java.io.Serializable;
+import java.security.PublicKey;
 
 public class Mensaje implements Serializable {
 
@@ -10,17 +11,17 @@ public class Mensaje implements Serializable {
     String Mensaje;
     int puertoDestino;
     int puertoOrigen;
-    
-    public Mensaje(String ipDestino, String usuario, String mensaje, int puertoDestino, int puertoOrigen) {
-        this.ipOrigen = ipOrigen;
-        this.ipDestino = ipDestino;
-        this.usuario = usuario;
-        this.puertoDestino = puertoDestino;
-        this.puertoOrigen = puertoOrigen;
-
-    }
+    PublicKey publicKey;
 
     public Mensaje() {
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(PublicKey publicKey) {
+        this.publicKey = publicKey;
     }
 
     public int getPuertoOrigen() {
