@@ -43,6 +43,10 @@ public class ControladorSesionLlamada implements ActionListener {
         vista.agregarLineaChat(msg);
     }
 
+    public void borrarHistorial(){
+        this.vista.borrarHistorial();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -60,7 +64,8 @@ public class ControladorSesionLlamada implements ActionListener {
 
             case("Desconectar"):
 				Cliente.getCliente().enviaMensaje("DESCONECTAR");
-                ControladorSesionLlamada.get(false).esconderVista();
+                this.esconderVista();
+                this.borrarHistorial();
                 ControladorInicioNuevo.get(true);
             break;
         }

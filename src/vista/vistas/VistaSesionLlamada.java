@@ -115,4 +115,9 @@ public class VistaSesionLlamada extends JFrame implements IVistaSesionLlamada {
 	public void actualizarTitulo(String ip, int puerto) {
 		this.setTitle("Sesion: " + ip + " | " + puerto );
 	}
+
+	@Override
+	public void borrarHistorial() {
+		this.txtArea.setText("");
+	}
 }

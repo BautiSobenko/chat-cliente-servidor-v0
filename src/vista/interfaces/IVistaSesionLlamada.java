@@ -13,6 +13,7 @@ public interface IVistaSesionLlamada {
     void actualizarTitulo(String ip, int puerto);
 	public void lanzarVentanaEmergente(String string);
     public void error(String string);
+    public void borrarHistorial();
 
 
 }
