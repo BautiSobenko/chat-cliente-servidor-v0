@@ -17,6 +17,7 @@ public class ControladorInicioNuevo implements ActionListener {
     private IVistaInicio vista;
     private Cliente cliente;
     private int miPuerto;
+    private Thread hiloCliente;
 
     private ControladorSesionLlamada controladorSesionLlamada;
 
@@ -32,7 +33,7 @@ public class ControladorInicioNuevo implements ActionListener {
         this.cliente.setIpServer("localhost");
 
         this.cliente.setPuertoOrigen(miPuerto); //Lo seteo para evitar problemas en el ServerSocket en el run()
-        Thread hiloCliente = new Thread(this.cliente);
+        this.hiloCliente = new Thread(this.cliente);
         hiloCliente.start();
     }
 

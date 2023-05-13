@@ -5,7 +5,7 @@ import java.security.*;
 import java.util.Base64;
 import javax.crypto.*;
 
-public class RSA {
+public class RSA implements Encriptacion<PublicKey> {
 
     private static Cipher rsa;
 
@@ -38,6 +38,11 @@ public class RSA {
 
     public PublicKey getPublicKey() {
         return publicKey;
+    }
+
+    @Override
+    public String encriptar(String msg) {
+        return null;
     }
 
     public String encriptar(String msg, PublicKey publicKeyExtremo) throws Exception  {

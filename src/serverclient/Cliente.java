@@ -3,6 +3,7 @@ package serverclient;
 import controlador.ControladorInicioNuevo;
 import controlador.ControladorRecepcionLlamada;
 import controlador.ControladorSesionLlamada;
+import encriptacion.Encriptacion;
 import encriptacion.RSA;
 import mensaje.Mensaje;
 
@@ -10,26 +11,29 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.PublicKey;
 
-public class Cliente implements Runnable {
+public class Cliente implements Runnable,Emision,Recepcion {
 
+    //singleton
     private static Cliente cliente = null;
 
     private Socket sCliente;
-    private ServerSocket ssCliente;
+
+    private Conexion conexion;
+
     private int puertoDestino;
     private int puertoOrigen;
     private int puertoServidor;
     private String ipServer;
     private String ipDestino;
     private String ipOrigen;
-    private final RSA rsa;
 
     private PublicKey publicKeyExtremo;
+
+    private final Encriptacion<PublicKey> rsa;
 
     private Cliente(){
         this.rsa = new RSA();
@@ -42,7 +46,7 @@ public class Cliente implements Runnable {
         return cliente;
     }
 
-
+    @Override
     public void enviaMensaje(String msg) {
         try {
             sCliente = new Socket(ipServer, this.puertoServidor);
@@ -118,54 +122,50 @@ public class Cliente implements Runnable {
         }
     }
 
-
     @Override
     public void run() {
         try {
 
-            ssCliente = new ServerSocket(this.puertoOrigen);
+            this.conexion = new Conexion();
 
-            System.out.println("Escuchando desde puerto: " + this.puertoOrigen);
+            conexion.establecerConexion(this.puertoOrigen);
 
             String ipD, ipO, txt;
-            Socket soc;
-            Mensaje msg;
+            Mensaje mensajeRecibido;
 
-            while(true) {
+            while (true) {
 
-                soc = ssCliente.accept();
+                conexion.aceptarConexion();
 
-                ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
+                mensajeRecibido = this.recibeMensaje();
 
-                msg = (Mensaje) in.readObject();
+                txt = mensajeRecibido.getMensaje();
+                ipO = mensajeRecibido.getIpOrigen();
+                ipD = mensajeRecibido.getIpDestino();
 
-                txt = msg.getMensaje();
-                ipO = msg.getIpOrigen();
-                ipD = msg.getIpDestino();
-
-                if( txt.equalsIgnoreCase("LLAMADA") ){
+                if (txt.equalsIgnoreCase("LLAMADA")) {
                     ControladorRecepcionLlamada controladorRecepcionLlamada = ControladorRecepcionLlamada.get(false);
                     controladorRecepcionLlamada.setIpOrigen(ipD);
                     controladorRecepcionLlamada.setIpDestino(ipO); //IP Del que me envio ese mensaje
-                    controladorRecepcionLlamada.setPuertoDestino(msg.getPuertoOrigen()); //Puerto Del que me envio ese mensaje
+                    controladorRecepcionLlamada.setPuertoDestino(mensajeRecibido.getPuertoOrigen()); //Puerto Del que me envio ese mensaje
                     controladorRecepcionLlamada.actualizarLabelIP(ipO);
                     ControladorRecepcionLlamada.get(true);
-                    this.publicKeyExtremo = msg.getPublicKey(); //Recibo clave publica del extremo (puedo aceptar la llamada)
-                }else if( txt.equalsIgnoreCase("LLAMADA ACEPTADA") ){
-                    this.publicKeyExtremo = msg.getPublicKey(); //Recibo la clave publica del extremo que acepto mi llamada
+                    this.publicKeyExtremo = mensajeRecibido.getPublicKey(); //Recibo clave publica del extremo (puedo aceptar la llamada)
+                } else if (txt.equalsIgnoreCase("LLAMADA ACEPTADA")) {
+                    this.publicKeyExtremo = mensajeRecibido.getPublicKey(); //Recibo la clave publica del extremo que acepto mi llamada
                     ControladorInicioNuevo.get(false);
                     ControladorSesionLlamada.get(true);
-                }else if( txt.equalsIgnoreCase("DESCONECTAR") ){
+                } else if (txt.equalsIgnoreCase("DESCONECTAR")) {
                     ControladorSesionLlamada.get(false).esconderVista();
                     ControladorSesionLlamada.get(false).borrarHistorial();
                     ControladorInicioNuevo.get(true).limpiarCampos();
                     this.publicKeyExtremo = null;
-                }else{
+                } else {
                     String mensajeDesencriptado = this.rsa.desencriptar(txt); //Lo desencripto con mi clave privada. El extremo encripto con mi clave publica (enviada)
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
                 }
 
-                soc.close();
+                conexion.cerrarConexion();
 
             }
 
@@ -210,5 +210,17 @@ public class Cliente implements Runnable {
 
     public void setIpOrigen(String ipOrigen) {
         this.ipOrigen = ipOrigen;
+    }
+
+    @Override
+    public Mensaje recibeMensaje() {
+        ObjectInputStream in = conexion.getInputStreamConexion();
+        try {
+            return (Mensaje) in.readObject();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

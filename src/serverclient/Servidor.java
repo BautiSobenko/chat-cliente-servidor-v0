@@ -96,7 +96,6 @@ public class Servidor implements Runnable {
 
             }
 
-
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -104,7 +103,6 @@ public class Servidor implements Runnable {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }
