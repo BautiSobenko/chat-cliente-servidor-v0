@@ -120,10 +120,10 @@ public class ControladorInicioNuevo implements ActionListener {
     }
 
     public void verificarBoton(){
-        if (Configuracion.puertoValido())
-            this.vista.habilitarBotonConexion();
-        else
-            this.vista.deshabilitarBotonConexion();
+      //  if (Configuracion.puertoValido())
+      //      this.vista.habilitarBotonConexion();
+      //  else
+      //      this.vista.deshabilitarBotonConexion();
     }
 
 }

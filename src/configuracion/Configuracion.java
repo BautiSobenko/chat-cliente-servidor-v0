@@ -21,6 +21,8 @@ public class Configuracion {
         return config;
     }
     public void tomarIpPuertoDesdeArchivo(){
+        this.ip = "0.0.0.0";
+        this.puerto = 0;
         try {
             File file = new File(path);
             // Si el archivo no existe es creado
@@ -37,8 +39,6 @@ public class Configuracion {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.ip = "0.0.0.0";
-        this.puerto = 0;
     }
     public static boolean puertoValido(String port){
         int puerto = Integer.parseInt(port);

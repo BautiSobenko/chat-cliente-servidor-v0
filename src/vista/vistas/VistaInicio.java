@@ -78,8 +78,6 @@ public class VistaInicio extends JFrame implements IVistaInicio {
 		contentPane.add(txtPuerto);
 		
 		btnConectar = new JButton("Conectar");
-		if (Configuracion.puertoValido() == false)
-			this.deshabilitarBotonConexion();
 		btnConectar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnConectar.setBounds(293, 194, 124, 48);
 		contentPane.add(btnConectar);
