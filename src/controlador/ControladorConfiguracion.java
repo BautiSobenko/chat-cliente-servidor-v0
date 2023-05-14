@@ -41,15 +41,15 @@ public class ControladorConfiguracion implements ActionListener{
 			String IP = "localhost";
 			int miPuerto = vista.getPuerto();
 
-			Configuracion.escribirPuertoArchivo(miPuerto);
-			if (Configuracion.puertoValido()) {
+			//Configuracion.getConfig().getPuerto();
+			//if (Configuracion.puertoValido()) {}
 				controladorInicio.setMiPuerto(miPuerto);
-			}
+
 				controladorInicio.startCliente();
 				controladorInicio.verificarBoton();
 				this.vista.esconder();
-		} catch (IOException exception) {
-			vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
+		//} catch (IOException exception) {
+		//	vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
 		}catch (Exception exception){
 			vista.lanzarVentanaEmergente("Error al ingresar Puerto");
 

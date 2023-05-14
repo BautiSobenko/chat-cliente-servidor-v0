@@ -35,7 +35,11 @@ public class Conexion implements IConexion {
 
     @Override
     public ObjectOutputStream getOutputStreamConexion() {
-        return null;
+        try {
+            return new ObjectOutputStream( this.socket.getOutputStream() );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -51,6 +55,17 @@ public class Conexion implements IConexion {
     public void cerrarConexion() {
         try {
             this.socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void crearConexionEnvio(Object... args) {
+        String ipServer = (String) args[0];
+        int puertoServidor = (int) args[1];
+        try {
+            this.socket = new Socket(ipServer,puertoServidor);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

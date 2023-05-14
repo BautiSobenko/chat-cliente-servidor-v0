@@ -20,7 +20,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
     //singleton
     private static Cliente cliente = null;
 
-    private Socket sCliente;
+    //private Socket sCliente;
 
     private Conexion conexion;
 
@@ -49,7 +49,8 @@ public class Cliente implements Runnable,Emision,Recepcion {
     @Override
     public void enviaMensaje(String msg) {
         try {
-            sCliente = new Socket(ipServer, this.puertoServidor);
+            //sCliente = new Socket(ipServer, this.puertoServidor);
+            this.conexion.crearConexionEnvio(ipServer, this.puertoServidor);
 
             Mensaje mensaje = new Mensaje();
 
@@ -69,12 +70,13 @@ public class Cliente implements Runnable,Emision,Recepcion {
                 mensaje.setMensaje( this.rsa.encriptar(msg, this.publicKeyExtremo) ); //Encripto con la llave publica que me envio
             }
 
-            ObjectOutputStream out = new ObjectOutputStream(sCliente.getOutputStream());
+            ObjectOutputStream out = this.conexion.getOutputStreamConexion();//new ObjectOutputStream(sCliente.getOutputStream());
             out.writeObject(mensaje);
 
             out.close();
 
-            sCliente.close();
+            //sCliente.close();
+            conexion.cerrarConexion();
 
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -88,7 +90,8 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     public void enviaMensaje(String msg, String ipDestino, int puertoDestino) {
         try {
-            sCliente = new Socket(ipServer, this.puertoServidor);
+            //sCliente = new Socket(ipServer, this.puertoServidor);
+            this.conexion.crearConexionEnvio(ipServer, this.puertoServidor);
 
             Mensaje mensaje = new Mensaje();
 
@@ -108,12 +111,13 @@ public class Cliente implements Runnable,Emision,Recepcion {
                 mensaje.setPuertoOrigen(this.puertoOrigen);
             }
 
-            ObjectOutputStream out = new ObjectOutputStream(sCliente.getOutputStream());
+            ObjectOutputStream out = this.conexion.getOutputStreamConexion(); //new ObjectOutputStream(sCliente.getOutputStream());
             out.writeObject(mensaje);
 
             out.close();
 
-            sCliente.close();
+            conexion.cerrarConexion();
+            //sCliente.close();
 
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
