@@ -54,7 +54,11 @@ public class Cliente implements Runnable,Emision,Recepcion {
             this.ipOrigen = adress.getHostAddress();
             mensaje.setPuertoOrigen(this.puertoOrigen);
             mensaje.setIpOrigen(this.ipOrigen);
-            mensaje.setIpDestino(this.ipDestino);
+            if( ipDestino.equalsIgnoreCase("localhost") )
+                mensaje.setIpDestino(adress.getHostAddress());
+            else
+                mensaje.setIpDestino(this.ipDestino);
+
             mensaje.setPuertoDestino(this.puertoDestino);
 
             //Ante mensaje de "Aviso" no debo cifrarlos
@@ -113,7 +117,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
             out.close();
 
             conexion.cerrarConexion();
-            //sCliente.close();
 
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -169,10 +172,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -217,9 +216,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
         ObjectInputStream in = conexion.getInputStreamConexion();
         try {
             return (Mensaje) in.readObject();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

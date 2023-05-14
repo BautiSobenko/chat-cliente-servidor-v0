@@ -82,7 +82,6 @@ public class ControladorInicioNuevo implements ActionListener {
 	                try {
                         this.cliente.setIpDestino(ipDestino);
                         this.cliente.setPuertoDestino(puertoDestino);
-                        System.out.println(ipDestino + puertoDestino);
                         this.cliente.setIpOrigen("localhost");
                         this.cliente.setPuertoOrigen(miPuerto);
 

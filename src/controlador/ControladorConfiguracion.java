@@ -2,7 +2,6 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.UnknownHostException;
 
 import vista.interfaces.IVistaConfiguracion;
@@ -39,7 +38,6 @@ public class ControladorConfiguracion implements ActionListener{
 
 			ControladorInicioNuevo controladorInicio = ControladorInicioNuevo.get(true);
 
-			//Deberia tomar la IP de la vista
 			String IP = "localhost";
 			int miPuerto = vista.getPuerto();
 

@@ -7,17 +7,16 @@ import vista.vistas.VistaServidor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
-public class Servidor implements Runnable {
+public class Servidor implements Runnable, Recepcion, Emision {
 
     private int puertoServer;
     private static Servidor servidor = null;
     private VistaServidor vistaServidor;
-    private HashSet<Integer> conexiones;
+    private HashSet<String> conexiones;
 
     private Conexion conexion;
 
@@ -59,11 +58,7 @@ public class Servidor implements Runnable {
                 //Acepto conexion, me crea un Socket
                 conexion.aceptarConexion();
 
-                ObjectInputStream in = new ObjectInputStream(conexion.getSocket().getInputStream());
-
-                mensaje = (Mensaje) in.readObject();
-
-                System.out.println(mensaje);
+                mensaje = this.recibeMensaje();
 
                 puertoDestino = mensaje.getPuertoDestino();
                 puertoOrigen = mensaje.getPuertoOrigen();
@@ -71,19 +66,23 @@ public class Servidor implements Runnable {
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(puertoDestino)){
+                System.out.println("IP DESTINO:" + ipDestino);
+                System.out.println("IP ORIGEN:" + ipOrigen);
+
+                //TODO: No puedo llamar a una IP como "localhost"
+                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino)){
 
                     ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
 
                 }else{
 
                     if( msg.equalsIgnoreCase("LLAMADA ACEPTADA") ){
-                        this.conexiones.add(puertoDestino);
-                        this.conexiones.add(puertoOrigen);
+                        this.conexiones.add(ipOrigen);
+                        this.conexiones.add(ipDestino);
                     }
                     if( msg.equalsIgnoreCase("DESCONECTAR") ){
-                        this.conexiones.remove(puertoDestino);
-                        this.conexiones.remove(puertoOrigen);
+                        this.conexiones.remove(ipOrigen);
+                        this.conexiones.remove(ipDestino);
                     }
 
                     this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " :\n" + msg + "\n\n");
@@ -102,9 +101,24 @@ public class Servidor implements Runnable {
 
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public void enviaMensaje(String msg) {
+
+    }
+
+    @Override
+    public Mensaje recibeMensaje() {
+        ObjectInputStream in = conexion.getInputStreamConexion();
+        try {
+            return (Mensaje) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
