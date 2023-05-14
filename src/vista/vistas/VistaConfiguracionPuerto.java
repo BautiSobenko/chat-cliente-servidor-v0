@@ -55,7 +55,7 @@ public class VistaConfiguracionPuerto extends JFrame implements IVistaConfigurac
 		contentPane.add(txtPuerto);
 		txtPuerto.setColumns(10);
 		txtPuerto.setHorizontalAlignment(SwingConstants.CENTER);
-		//txtPuerto.setText(String.valueOf(Configuracion.puertoDesdeArchivo()));
+		txtPuerto.setText(String.valueOf(Configuracion.getConfig().getParametros()[1]));
 		
 		btnContinuar = new JButton("Continuar");
 		btnContinuar.setFont(new Font("Tahoma", Font.PLAIN, 16));

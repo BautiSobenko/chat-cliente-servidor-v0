@@ -2,6 +2,7 @@ package main;
 
 import configuracion.Configuracion;
 import controlador.ControladorConfiguracion;
+import controlador.ControladorInicioNuevo;
 
 public class Main{
 

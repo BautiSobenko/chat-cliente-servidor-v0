@@ -3,6 +3,7 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import vista.interfaces.IVistaConfiguracion;
 import configuracion.Configuracion;
@@ -38,21 +39,26 @@ public class ControladorConfiguracion implements ActionListener{
 
 			ControladorInicioNuevo controladorInicio = ControladorInicioNuevo.get(true);
 
+			//Deberia tomar la IP de la vista
 			String IP = "localhost";
 			int miPuerto = vista.getPuerto();
 
-			//Configuracion.getConfig().getPuerto();
-			//if (Configuracion.puertoValido()) {}
+			if (Configuracion.getConfig().validarConfiguracion(IP, miPuerto)){
+				Configuracion.getConfig().escribirArchivoConfiguracion(IP,miPuerto);
 				controladorInicio.setMiPuerto(miPuerto);
-
 				controladorInicio.startCliente();
 				controladorInicio.verificarBoton();
 				this.vista.esconder();
-		//} catch (IOException exception) {
-		//	vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
-		}catch (Exception exception){
-			vista.lanzarVentanaEmergente("Error al ingresar Puerto");
+			}
+			else{
+				vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
+			}
+		}catch (RuntimeException exception){
+			vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
+		}catch (UnknownHostException exception){
 
+		} catch (Exception ex) {
+			vista.lanzarVentanaEmergente("Error al escribir archivo de configuracion");
 		}
 	}
 
