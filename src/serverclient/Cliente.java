@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.PublicKey;
 
@@ -19,8 +18,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     //singleton
     private static Cliente cliente = null;
-
-    //private Socket sCliente;
 
     private Conexion conexion;
 
@@ -49,7 +46,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
     @Override
     public void enviaMensaje(String msg) {
         try {
-            //sCliente = new Socket(ipServer, this.puertoServidor);
             this.conexion.crearConexionEnvio(ipServer, this.puertoServidor);
 
             Mensaje mensaje = new Mensaje();

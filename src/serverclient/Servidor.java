@@ -19,6 +19,8 @@ public class Servidor implements Runnable {
     private VistaServidor vistaServidor;
     private HashSet<Integer> conexiones;
 
+    private Conexion conexion;
+
     private Servidor(){
         this.puertoServer = 9090; //Si no lo seteo antes, se rompe, intenta abrir ServerSocket con puerto des escucha null
         this.vistaServidor = new VistaServidor();
@@ -40,21 +42,24 @@ public class Servidor implements Runnable {
 
         try {
 
-            ServerSocket servidor = new ServerSocket(this.puertoServer);
+            this.conexion = new Conexion();
+
+            //ServerSocket
+            conexion.establecerConexion(this.puertoServer);
 
             this.vistaServidor.muestraMensaje("Servidor Iniciado! \nPuerto: " + this.puertoServer + "\n");
 
             String ipOrigen, ipDestino, msg;
             int puertoDestino;
             int puertoOrigen;
-            Socket soc;
             Mensaje mensaje;
 
             while (true) {
 
-                soc = servidor.accept();
+                //Acepto conexion, me crea un Socket
+                conexion.aceptarConexion();
 
-                ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
+                ObjectInputStream in = new ObjectInputStream(conexion.getSocket().getInputStream());
 
                 mensaje = (Mensaje) in.readObject();
 
@@ -83,24 +88,21 @@ public class Servidor implements Runnable {
 
                     this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " :\n" + msg + "\n\n");
 
-                    Socket enviaDestinatario = new Socket(ipDestino, puertoDestino);
+                    //Creo socket: Reenvio del mensaje
+                    this.conexion.crearConexionEnvio(ipDestino, puertoDestino);
 
-                    ObjectOutputStream out = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                    ObjectOutputStream out = new ObjectOutputStream(this.conexion.getSocket().getOutputStream());
 
                     out.writeObject(mensaje);
 
-                    enviaDestinatario.close();
+                    this.conexion.cerrarConexion();
                 }
 
-                soc.close();
+                this.conexion.cerrarConexion();
 
             }
 
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
