@@ -11,6 +11,7 @@ public class Main{
 
         ControladorConfiguracion.get(true);
 
+        //! Registro al Server, la app debe iniciar con este controlador
         //ControladorRegistro.get(true);
 
     }

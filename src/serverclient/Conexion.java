@@ -60,6 +60,15 @@ public class Conexion implements IConexion {
     }
 
     @Override
+    public void cerrarServer() {
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void crearConexionEnvio(Object... args) {
         String ipServer = (String) args[0];
         int puertoServidor = (int) args[1];
@@ -74,31 +83,16 @@ public class Conexion implements IConexion {
         return puertoOrigen;
     }
 
-    public void setPuertoOrigen(int puertoOrigen) {
-        this.puertoOrigen = puertoOrigen;
-    }
-
     public int getPuertoDestino() {
         return puertoDestino;
-    }
-
-    public void setPuertoDestino(int puertoDestino) {
-        this.puertoDestino = puertoDestino;
     }
 
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
 
-    public void setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-    }
-
     public Socket getSocket() {
         return socket;
     }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
 }

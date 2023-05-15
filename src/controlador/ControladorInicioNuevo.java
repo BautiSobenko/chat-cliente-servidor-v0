@@ -7,6 +7,7 @@ import vista.vistas.VistaInicio;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -54,6 +55,11 @@ public class ControladorInicioNuevo implements ActionListener {
 
 
         return controladorInicio;
+    }
+
+    public int getMiPuerto() {
+
+        return miPuerto;
     }
 
     public void lanzarAviso(String msg){

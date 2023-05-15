@@ -21,9 +21,9 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     public final Conexion conexion;
 
+    private int puertoServidor;
     private int puertoDestino;
     private int puertoOrigen;
-    private int puertoServidor;
     private String ipServer;
     private String ipDestino;
     private String ipOrigen;
@@ -167,7 +167,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
                 }
 
-                this. conexion.cerrarConexion();
+                this.conexion.cerrarServer();
 
             }
 
@@ -176,6 +176,10 @@ public class Cliente implements Runnable,Emision,Recepcion {
         }
 
 
+    }
+
+    public Conexion getConexion() {
+        return conexion;
     }
 
     public void setPuertoDestino(int puertoDestino) {
@@ -209,6 +213,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
     public void setIpOrigen(String ipOrigen) {
         this.ipOrigen = ipOrigen;
     }
+
 
     @Override
     public Mensaje recibeMensaje() {

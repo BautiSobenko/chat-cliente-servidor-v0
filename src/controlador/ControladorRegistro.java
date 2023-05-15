@@ -55,18 +55,20 @@ public class ControladorRegistro implements ActionListener {
 
                 Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
 
-                if (configuracion.validarConfiguracion()){
+                if(controladorInicio.getMiPuerto() != vista.getPuerto() ) {
 
-                    configuracion.escribirArchivoConfiguracion();
+                    if (configuracion.validarConfiguracion()) {
 
-                    controladorInicio.setMiPuerto(miPuerto);
-                    controladorInicio.startCliente();
-                    controladorInicio.verificarBoton();
+                        configuracion.escribirArchivoConfiguracion();
 
-                    this.vista.esconder();
-                }
-                else{
-                    vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
+                        controladorInicio.setMiPuerto(miPuerto);
+                        controladorInicio.startCliente();
+                        controladorInicio.verificarBoton();
+
+                        this.vista.esconder();
+                    } else {
+                        vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
+                    }
                 }
             }catch (RuntimeException exception){
                 vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");

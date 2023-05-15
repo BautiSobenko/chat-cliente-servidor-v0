@@ -10,6 +10,9 @@ public interface IConexion {
     public void aceptarConexion();
 
     public void cerrarConexion();
+
+    public void cerrarServer();
+
     public void crearConexionEnvio(Object... args);
 
     public ObjectInputStream getInputStreamConexion();

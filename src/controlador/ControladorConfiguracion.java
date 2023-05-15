@@ -39,23 +39,28 @@ public class ControladorConfiguracion implements ActionListener{
 			ControladorInicioNuevo controladorInicio = ControladorInicioNuevo.get(true);
 
 			String IP = "localhost";
-			int miPuerto = vista.getPuerto();
 
-			Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
+			if(controladorInicio.getMiPuerto() != vista.getPuerto() ){
 
-			if (configuracion.validarConfiguracion()){
+				int miPuerto = vista.getPuerto();
 
-				configuracion.escribirArchivoConfiguracion();
+				Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
 
-				controladorInicio.setMiPuerto(miPuerto);
-				controladorInicio.startCliente();
-				controladorInicio.verificarBoton();
+				if (configuracion.validarConfiguracion()){
 
-				this.vista.esconder();
+					configuracion.escribirArchivoConfiguracion();
+
+					controladorInicio.setMiPuerto(miPuerto);
+					controladorInicio.startCliente();
+					controladorInicio.verificarBoton();
+
+					this.vista.esconder();
+				}
+				else{
+					vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
+				}
 			}
-			else{
-				vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
-			}
+
 		}catch (RuntimeException exception){
 			vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
 		}catch (UnknownHostException exception){
