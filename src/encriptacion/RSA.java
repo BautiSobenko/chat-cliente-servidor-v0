@@ -28,9 +28,6 @@ public class RSA implements Encriptacion<PublicKey> {
             //Llave privada
             this.privateKey = keys.getPrivate();
 
-            System.out.println("CLAVE PRIVADA: " + this.privateKey);
-            System.out.println("CLAVE PUBLICA: " + this.publicKey);
-
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

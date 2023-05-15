@@ -31,10 +31,16 @@ public class ControladorInicioNuevo implements ActionListener {
         //TODO: Debemos obtener el puerto y la IP del servidor de otro lado, no hardcodearlo
         this.cliente.setPuertoServidor(9090);
         this.cliente.setIpServer("localhost");
-
         this.cliente.setPuertoOrigen(miPuerto); //Lo seteo para evitar problemas en el ServerSocket en el run()
+
+        System.out.println(this.cliente.conexion);
+
         this.hiloCliente = new Thread(this.cliente);
         hiloCliente.start();
+
+        //TODO: Registro de servidor
+        //this.cliente.enviaMensaje("REGISTRO");
+
     }
 
     public static ControladorInicioNuevo get(boolean mostrar) {

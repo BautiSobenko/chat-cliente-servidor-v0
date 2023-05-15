@@ -18,7 +18,6 @@ public class Conexion implements IConexion {
         try {
             int puertoOrigen = (int) args[0];
             this.serverSocket = new ServerSocket(puertoOrigen);
-            System.out.println("Escuchando desde puerto: " + this.puertoOrigen);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

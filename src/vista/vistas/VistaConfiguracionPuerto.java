@@ -61,6 +61,7 @@ public class VistaConfiguracionPuerto extends JFrame implements IVistaConfigurac
 		btnContinuar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnContinuar.setBounds(83, 115, 236, 43);
 		contentPane.add(btnContinuar);
+
 	}
 
 	public void setActionListener(ActionListener controlador) {
@@ -88,6 +89,11 @@ public class VistaConfiguracionPuerto extends JFrame implements IVistaConfigurac
 	@Override
 	public void lanzarVentanaEmergente(String mensaje) {
 		JOptionPane.showMessageDialog(this,mensaje);
+	}
+
+	@Override
+	public void setLblDireccionIP(String direccionIP) {
+
 	}
 
 }

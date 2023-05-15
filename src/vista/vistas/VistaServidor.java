@@ -54,7 +54,6 @@ public class VistaServidor extends JFrame {
 	}
 	
 	public void muestraMensaje(String msg) {
-		System.out.println(msg);
 		this.textArea.append(msg);
 	}
 	

@@ -13,12 +13,25 @@ public class Configuracion implements Configurar{
 
     private static final String path = "chat.config";
 
+    private Configuracion(String IP, int puerto) {
+        this.ip = IP;
+        this.puerto = puerto;
+        leerArchivoConfiguracion();
+    }
+
     private Configuracion() {
         leerArchivoConfiguracion();
     }
+
     public static Configuracion getConfig(){
         if (config==null)
             config = new Configuracion();
+        return config;
+    }
+
+    public static Configuracion getConfig(String IP, int puerto){
+        if (config == null)
+            config = new Configuracion(IP, puerto);
         return config;
     }
 
@@ -71,10 +84,7 @@ public class Configuracion implements Configurar{
 
         String ipAux;
 
-        this.ip = (String) args[0];
-        this.puerto = (int) args[1];
-
-        if (ip.equals("localhost")){
+        if (this.ip.equals("localhost")){
             InetAddress address = InetAddress.getLocalHost();
             ipAux = address.getHostAddress();
         }
@@ -96,13 +106,11 @@ public class Configuracion implements Configurar{
 
     @Override
     public boolean validarConfiguracion(Object... args) throws UnknownHostException{
-        String ip = (String) args[0];
-        int puerto = (int) args[1];
-        if (ip.equals("localhost")){
+        if (this.ip.equals("localhost")){
             InetAddress address = InetAddress.getLocalHost();
             ip = address.getHostAddress();
         }
-        return ipValida(ip) && puertoValido(puerto);
+        return ipValida(ip) && puertoValido(this.puerto);
     }
 
 
@@ -114,6 +122,13 @@ public class Configuracion implements Configurar{
         return puerto;
     }
 
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
+    }
 
     @Override
     public String[] getParametros() {

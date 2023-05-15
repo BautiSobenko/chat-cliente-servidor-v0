@@ -1,6 +1,5 @@
 package main;
 
-import controlador.ControladorConfiguracion;
 import serverclient.Servidor;
 
 public class MainServer {

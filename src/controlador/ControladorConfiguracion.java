@@ -41,11 +41,16 @@ public class ControladorConfiguracion implements ActionListener{
 			String IP = "localhost";
 			int miPuerto = vista.getPuerto();
 
-			if (Configuracion.getConfig().validarConfiguracion(IP, miPuerto)){
-				Configuracion.getConfig().escribirArchivoConfiguracion(IP,miPuerto);
+			Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
+
+			if (configuracion.validarConfiguracion()){
+
+				configuracion.escribirArchivoConfiguracion();
+
 				controladorInicio.setMiPuerto(miPuerto);
 				controladorInicio.startCliente();
 				controladorInicio.verificarBoton();
+
 				this.vista.esconder();
 			}
 			else{

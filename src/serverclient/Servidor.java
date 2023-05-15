@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class Servidor implements Runnable, Recepcion, Emision {
 
@@ -18,14 +17,21 @@ public class Servidor implements Runnable, Recepcion, Emision {
     private VistaServidor vistaServidor;
     private HashSet<String> conexiones;
 
+    private HashMap<String, Integer> registro;
+
     private Conexion conexion;
 
     private Servidor(){
         this.puertoServer = 9090; //Si no lo seteo antes, se rompe, intenta abrir ServerSocket con puerto des escucha null
         this.vistaServidor = new VistaServidor();
+
+        conexiones = new HashSet<>();
+        registro = new HashMap<>();
+
         Thread hiloServer = new Thread(this);
         hiloServer.start();
-        conexiones = new HashSet<>();
+
+
     }
 
     public static Servidor getServer(){
@@ -66,15 +72,15 @@ public class Servidor implements Runnable, Recepcion, Emision {
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                System.out.println("IP DESTINO:" + ipDestino);
-                System.out.println("IP ORIGEN:" + ipOrigen);
-
-                //TODO: No puedo llamar a una IP como "localhost"
-                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino)){
+                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino) ){
 
                     ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
 
-                }else{
+                } else if( msg.equalsIgnoreCase("REGISTRO") ) {
+
+                    this.registro.put(ipOrigen, puertoOrigen);
+
+                } else{
 
                     if( msg.equalsIgnoreCase("LLAMADA ACEPTADA") ){
                         this.conexiones.add(ipOrigen);
@@ -105,6 +111,10 @@ public class Servidor implements Runnable, Recepcion, Emision {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void registrar( String IP, Integer puerto ) {
+        this.registro.put( IP, puerto );
     }
 
     @Override

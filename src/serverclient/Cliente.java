@@ -19,7 +19,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
     //singleton
     private static Cliente cliente = null;
 
-    private Conexion conexion;
+    public final Conexion conexion;
 
     private int puertoDestino;
     private int puertoOrigen;
@@ -34,6 +34,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     private Cliente(){
         this.rsa = new RSA();
+        this.conexion = new Conexion();
     }
 
     public static Cliente getCliente() {
@@ -46,7 +47,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
     @Override
     public void enviaMensaje(String msg) {
         try {
-            this.conexion.crearConexionEnvio(ipServer, this.puertoServidor);
+            this.conexion.crearConexionEnvio(this.ipServer, this.puertoServidor);
 
             Mensaje mensaje = new Mensaje();
 
@@ -54,18 +55,21 @@ public class Cliente implements Runnable,Emision,Recepcion {
             this.ipOrigen = adress.getHostAddress();
             mensaje.setPuertoOrigen(this.puertoOrigen);
             mensaje.setIpOrigen(this.ipOrigen);
-            if( ipDestino.equalsIgnoreCase("localhost") )
+
+            if( ipDestino.equals("localhost") ) //Si es "localhost", debo trabajo con la IP real, no con la String "localhost"
                 mensaje.setIpDestino(adress.getHostAddress());
             else
                 mensaje.setIpDestino(this.ipDestino);
 
             mensaje.setPuertoDestino(this.puertoDestino);
 
-            //Ante mensaje de "Aviso" no debo cifrarlos
-            if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") ) {
+            //Los mensajes de "Control" no debo cifrarlos
+            if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") || msg.equals("REGISTRO") ) {
                 mensaje.setMensaje(msg);
+
                 if (msg.equals("LLAMADA"))
                     mensaje.setPublicKey(this.rsa.getPublicKey()); //Cuando yo llamo, ya envio mi clave publica (puede aceptarme)
+
             }else{
                 mensaje.setMensaje( this.rsa.encriptar(msg, this.publicKeyExtremo) ); //Encripto con la llave publica que me envio
             }
@@ -75,7 +79,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
             out.close();
 
-            //sCliente.close();
             conexion.cerrarConexion();
 
         } catch (UnknownHostException e) {
@@ -90,7 +93,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     public void enviaMensaje(String msg, String ipDestino, int puertoDestino) {
         try {
-            //sCliente = new Socket(ipServer, this.puertoServidor);
             this.conexion.crearConexionEnvio(ipServer, this.puertoServidor);
 
             Mensaje mensaje = new Mensaje();
@@ -128,17 +130,14 @@ public class Cliente implements Runnable,Emision,Recepcion {
     @Override
     public void run() {
         try {
-
-            this.conexion = new Conexion();
-
-            conexion.establecerConexion(this.puertoOrigen);
+            this.conexion.establecerConexion(this.puertoOrigen);
 
             String ipD, ipO, txt;
             Mensaje mensajeRecibido;
 
             while (true) {
 
-                conexion.aceptarConexion();
+                this.conexion.aceptarConexion();
 
                 mensajeRecibido = this.recibeMensaje();
 
@@ -168,7 +167,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
                 }
 
-                conexion.cerrarConexion();
+                this. conexion.cerrarConexion();
 
             }
 
