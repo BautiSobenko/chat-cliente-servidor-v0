@@ -1,5 +1,6 @@
 package vista.vistas;
 
+import configuracion.ConfiguracionCliente;
 import vista.interfaces.IVistaConfiguracion;
 import configuracion.Configuracion;
 
@@ -55,7 +56,7 @@ public class VistaConfiguracionPuerto extends JFrame implements IVistaConfigurac
 		contentPane.add(txtPuerto);
 		txtPuerto.setColumns(10);
 		txtPuerto.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPuerto.setText(String.valueOf(Configuracion.getConfig().getParametros()[1]));
+		txtPuerto.setText(String.valueOf(ConfiguracionCliente.getConfig().getParametros()[1]));
 		
 		btnContinuar = new JButton("Continuar");
 		btnContinuar.setFont(new Font("Tahoma", Font.PLAIN, 16));

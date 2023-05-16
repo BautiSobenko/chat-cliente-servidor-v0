@@ -1,5 +1,6 @@
 package serverclient;
 
+import configuracion.ConfiguracionServer;
 import controlador.ControladorInicioNuevo;
 import controlador.ControladorRecepcionLlamada;
 import controlador.ControladorSesionLlamada;
@@ -192,10 +193,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     public void setIpDestino(String ipDestino) {
         this.ipDestino = ipDestino;
-    }
-
-    public String getIpServer() {
-        return ipServer;
     }
 
     public void setIpServer(String ipServer) {

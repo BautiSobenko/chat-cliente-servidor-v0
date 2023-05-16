@@ -1,6 +1,7 @@
 package controlador;
 
 import configuracion.Configuracion;
+import configuracion.ConfiguracionCliente;
 import vista.interfaces.IVistaConfiguracion;
 import vista.vistas.VistaConfiguracionPuerto;
 import vista.vistas.VistaRegistro;
@@ -53,7 +54,7 @@ public class ControladorRegistro implements ActionListener {
                 String IP = this.vista.getIP();
                 int miPuerto = this.vista.getPuerto();
 
-                Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
+                Configuracion configuracion = ConfiguracionCliente.getConfig(IP, miPuerto);
 
                 if(controladorInicio.getMiPuerto() != vista.getPuerto() ) {
 

@@ -5,58 +5,10 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.io.*;
 
-public class Configuracion implements Configurar{
-    //singleton
-    private static Configuracion config = null;
+public abstract class Configuracion implements Configurar{
     private String ip;
     private int puerto;
 
-    private static final String path = "chat.config";
-
-    private Configuracion(String IP, int puerto) {
-        this.ip = IP;
-        this.puerto = puerto;
-        leerArchivoConfiguracion();
-    }
-
-    private Configuracion() {
-        leerArchivoConfiguracion();
-    }
-
-    public static Configuracion getConfig(){
-        if (config==null)
-            config = new Configuracion();
-        return config;
-    }
-
-    public static Configuracion getConfig(String IP, int puerto){
-        if (config == null)
-            config = new Configuracion(IP, puerto);
-        return config;
-    }
-
-    @Override
-    public void leerArchivoConfiguracion(Object... args) {
-        try {
-            File file = new File(path);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-                this.ip = "localhost";
-                this.puerto = 1500;
-                escribirArchivoConfiguracion(this.ip, String.valueOf(this.puerto));
-            }
-            else {
-                FileReader fw = new FileReader(file);
-                BufferedReader bw = new BufferedReader(fw);
-                this.ip = bw.readLine();
-                this.puerto = Integer.parseInt(bw.readLine());
-                bw.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean puertoValido(int puerto){
         return (puerto>0 && puerto<65535);
@@ -76,32 +28,6 @@ public class Configuracion implements Configurar{
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-
-    @Override
-    public void escribirArchivoConfiguracion(Object... args) throws Exception{
-
-        String ipAux;
-
-        if (this.ip.equals("localhost")){
-            InetAddress address = InetAddress.getLocalHost();
-            ipAux = address.getHostAddress();
-        }
-        else
-            ipAux = this.ip;
-        try {
-            File file = new File(path);
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(ipAux);
-            bw.newLine();
-            bw.write(String.valueOf(this.puerto));
-            bw.close();
-        } catch (IOException e) {
-            throw new Exception(e);
-        }
-
     }
 
     @Override

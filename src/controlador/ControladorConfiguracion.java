@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.UnknownHostException;
 
+import configuracion.ConfiguracionCliente;
 import vista.interfaces.IVistaConfiguracion;
 import configuracion.Configuracion;
 import vista.vistas.VistaConfiguracionPuerto;
@@ -44,7 +45,7 @@ public class ControladorConfiguracion implements ActionListener{
 
 				int miPuerto = vista.getPuerto();
 
-				Configuracion configuracion = Configuracion.getConfig(IP, miPuerto);
+				Configuracion configuracion = ConfiguracionCliente.getConfig(IP, miPuerto);
 
 				if (configuracion.validarConfiguracion()){
 
