@@ -9,7 +9,6 @@ public abstract class Configuracion implements Configurar{
     private String ip;
     private int puerto;
 
-
     public boolean puertoValido(int puerto){
         return (puerto>0 && puerto<65535);
     }
@@ -64,4 +63,38 @@ public abstract class Configuracion implements Configurar{
         return param;
     }
 
+    public void leerArchivo(String path){
+        this.setIp("localhost");
+        try {
+            File file = new File(path);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+                escribirArchivoConfiguracion(this.getIp(), String.valueOf(this.getPuerto()));
+            }
+            else {
+                FileReader fw = new FileReader(file);
+                BufferedReader bw = new BufferedReader(fw);
+                this.setIp( bw.readLine());
+                this.setPuerto(Integer.parseInt(bw.readLine()));
+                bw.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void escribirArchivo(String path) throws Exception{
+        try {
+            File file = new File(path);
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(this.getIp());
+            bw.newLine();
+            bw.write(String.valueOf(this.getPuerto()));
+            bw.close();
+        } catch (IOException e) {
+            throw new Exception(e);
+        }
+    }
 }
