@@ -9,6 +9,5 @@ public interface Encriptacion<T> {
 
     public String desencriptar(String msg) throws Exception;
 
-    //! Esto puede estar mal (preguntar)
     PublicKey getPublicKey();
 }

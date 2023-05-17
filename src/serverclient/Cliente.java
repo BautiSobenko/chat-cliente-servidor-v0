@@ -1,8 +1,8 @@
 package serverclient;
 
-import configuracion.ConfiguracionServer;
 import controlador.ControladorInicioNuevo;
 import controlador.ControladorRecepcionLlamada;
+import controlador.ControladorRegistro;
 import controlador.ControladorSesionLlamada;
 import encriptacion.Encriptacion;
 import encriptacion.RSA;
@@ -29,9 +29,9 @@ public class Cliente implements Runnable,Emision,Recepcion {
     private String ipDestino;
     private String ipOrigen;
 
-    private PublicKey publicKeyExtremo;
-
     private final Encriptacion<PublicKey> rsa;
+    private PublicKey publicKeyExtremo; //Public Key que me envia el extremo para el cifrado de mensajes
+
 
     private Cliente(){
         this.rsa = new RSA();
@@ -57,12 +57,20 @@ public class Cliente implements Runnable,Emision,Recepcion {
             mensaje.setPuertoOrigen(this.puertoOrigen);
             mensaje.setIpOrigen(this.ipOrigen);
 
-            if( ipDestino.equals("localhost") ) //Si es "localhost", debo trabajo con la IP real, no con la String "localhost"
-                mensaje.setIpDestino(adress.getHostAddress());
-            else
-                mensaje.setIpDestino(this.ipDestino);
 
-            mensaje.setPuertoDestino(this.puertoDestino);
+            if( msg.equals("REGISTRO") ) {
+                mensaje.setIpDestino(this.ipOrigen);
+                mensaje.setPuertoDestino(this.puertoOrigen);
+            }else {
+
+                if( this.ipDestino.equals("localhost") ) //Si es "localhost", debo trabajo con la IP real, no con la String "localhost"
+                    mensaje.setIpDestino(adress.getHostAddress());
+                else
+                    mensaje.setIpDestino(this.ipDestino);
+
+                mensaje.setPuertoDestino(this.puertoDestino);
+
+            }
 
             //Los mensajes de "Control" no debo cifrarlos
             if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") || msg.equals("REGISTRO") ) {
@@ -82,10 +90,6 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
             conexion.cerrarConexion();
 
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -154,26 +158,35 @@ public class Cliente implements Runnable,Emision,Recepcion {
                     controladorRecepcionLlamada.actualizarLabelIP(ipO);
                     ControladorRecepcionLlamada.get(true);
                     this.publicKeyExtremo = mensajeRecibido.getPublicKey(); //Recibo clave publica del extremo (puedo aceptar la llamada)
-                } else if (txt.equalsIgnoreCase("LLAMADA ACEPTADA")) {
+                }
+                else if (txt.equalsIgnoreCase("LLAMADA ACEPTADA")) {
                     this.publicKeyExtremo = mensajeRecibido.getPublicKey(); //Recibo la clave publica del extremo que acepto mi llamada
                     ControladorInicioNuevo.get(false);
                     ControladorSesionLlamada.get(true);
-                } else if (txt.equalsIgnoreCase("DESCONECTAR")) {
+                }
+                else if (txt.equalsIgnoreCase("DESCONECTAR")) {
                     ControladorSesionLlamada.get(false).esconderVista();
                     ControladorSesionLlamada.get(false).borrarHistorial();
                     ControladorInicioNuevo.get(true).limpiarCampos();
                     this.publicKeyExtremo = null;
-                } else {
+                }
+                else if (txt.equalsIgnoreCase("REGISTRO EXITOSO")) {
+                    ControladorRegistro.get(false).registroCliente(true);
+                }
+                else if (txt.equalsIgnoreCase("REGISTRO FALLIDO")) {
+                    ControladorRegistro.get(false).registroCliente(false);
+                }
+                else {
                     String mensajeDesencriptado = this.rsa.desencriptar(txt); //Lo desencripto con mi clave privada. El extremo encripto con mi clave publica (enviada)
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
                 }
 
-                this.conexion.cerrarServer();
+                this.conexion.cerrarConexion();
 
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ControladorRegistro.get(false).aviso("El puerto ingresado ya esta en uso");
         }
 
 

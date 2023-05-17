@@ -1,6 +1,7 @@
 package configuracion;
 
 public class ConfiguracionServer extends Configuracion{
+
     //singleton
     private static ConfiguracionServer config = null;
     private static final String path = "server.config";

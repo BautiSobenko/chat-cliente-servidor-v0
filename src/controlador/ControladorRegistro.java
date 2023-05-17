@@ -3,7 +3,6 @@ package controlador;
 import configuracion.Configuracion;
 import configuracion.ConfiguracionCliente;
 import vista.interfaces.IVistaConfiguracion;
-import vista.vistas.VistaConfiguracionPuerto;
 import vista.vistas.VistaRegistro;
 
 import java.awt.event.ActionEvent;
@@ -49,28 +48,25 @@ public class ControladorRegistro implements ActionListener {
 
             try {
 
-                ControladorInicioNuevo controladorInicio = ControladorInicioNuevo.get(true);
+                ControladorInicioNuevo controladorInicio = ControladorInicioNuevo.get(false);
 
                 String IP = this.vista.getIP();
                 int miPuerto = this.vista.getPuerto();
 
                 Configuracion configuracion = ConfiguracionCliente.getConfig(IP, miPuerto);
 
-                if(controladorInicio.getMiPuerto() != vista.getPuerto() ) {
+                if ( configuracion.validarConfiguracion() ) {
 
-                    if (configuracion.validarConfiguracion()) {
+                    configuracion.escribirArchivoConfiguracion();
 
-                        configuracion.escribirArchivoConfiguracion();
+                    controladorInicio.setMiPuerto(miPuerto);
+                    controladorInicio.startCliente();
+                    controladorInicio.verificarBoton();
 
-                        controladorInicio.setMiPuerto(miPuerto);
-                        controladorInicio.startCliente();
-                        controladorInicio.verificarBoton();
-
-                        this.vista.esconder();
-                    } else {
-                        vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
-                    }
+                } else {
+                    vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
                 }
+
             }catch (RuntimeException exception){
                 vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
             }catch (UnknownHostException ignored){
@@ -79,6 +75,23 @@ public class ControladorRegistro implements ActionListener {
                 vista.lanzarVentanaEmergente("Error al escribir archivo de configuracion");
             }
         }
+
+        public void aviso(String msg) {
+            this.vista.lanzarVentanaEmergente(msg);
+        }
+
+        public void registroCliente(boolean exitoRegistro) {
+
+            if( exitoRegistro ){
+                ControladorInicioNuevo.get(true);
+                this.vista.esconder();
+            }else{
+                vista.lanzarVentanaEmergente("Actualmente hay una sesion abierta con el IP y Puerto ingresado");
+            }
+
+        }
+
+
 
 
 

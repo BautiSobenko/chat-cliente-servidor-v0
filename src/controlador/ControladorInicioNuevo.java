@@ -1,13 +1,11 @@
 package controlador;
 
-import configuracion.Configuracion;
 import serverclient.Cliente;
 import vista.interfaces.IVistaInicio;
 import vista.vistas.VistaInicio;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -34,13 +32,10 @@ public class ControladorInicioNuevo implements ActionListener {
         this.cliente.setIpServer("localhost");
         this.cliente.setPuertoOrigen(miPuerto); //Lo seteo para evitar problemas en el ServerSocket en el run()
 
-        System.out.println(this.cliente.conexion);
-
         this.hiloCliente = new Thread(this.cliente);
         hiloCliente.start();
 
-        //TODO: Registro de servidor
-        //this.cliente.enviaMensaje("REGISTRO");
+        this.cliente.enviaMensaje("REGISTRO");
 
     }
 

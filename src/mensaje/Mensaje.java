@@ -7,7 +7,6 @@ public class Mensaje implements Serializable {
 
     String ipOrigen;
     String ipDestino;
-    String usuario;
     String Mensaje;
     int puertoDestino;
     int puertoOrigen;
@@ -56,13 +55,6 @@ public class Mensaje implements Serializable {
         this.ipDestino = ipDestino;
     }
 
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
 
     public String getMensaje() {
         return Mensaje;
@@ -77,7 +69,6 @@ public class Mensaje implements Serializable {
         return "Mensaje{" +
                 "ipOrigen='" + ipOrigen + '\'' +
                 ", ipDestino='" + ipDestino + '\'' +
-                ", usuario='" + usuario + '\'' +
                 ", Mensaje='" + Mensaje + '\'' +
                 ", puertoDestino=" + puertoDestino +
                 '}';

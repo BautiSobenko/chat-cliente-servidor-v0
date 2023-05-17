@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Servidor implements Runnable, Recepcion, Emision {
 
@@ -72,23 +73,26 @@ public class Servidor implements Runnable, Recepcion, Emision {
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino) ){
-
+                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino) )
                     ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
-
-                } else if( msg.equalsIgnoreCase("REGISTRO") ) {
-
-                    this.registro.put(ipOrigen, puertoOrigen);
-
-                } else{
+                else{
 
                     if( msg.equalsIgnoreCase("LLAMADA ACEPTADA") ){
                         this.conexiones.add(ipOrigen);
                         this.conexiones.add(ipDestino);
                     }
-                    if( msg.equalsIgnoreCase("DESCONECTAR") ){
+                    else if( msg.equalsIgnoreCase("DESCONECTAR") ){
                         this.conexiones.remove(ipOrigen);
                         this.conexiones.remove(ipDestino);
+                    }
+                    else if( msg.equalsIgnoreCase("REGISTRO") ) {
+
+                        if( this.registrarCliente(ipOrigen, puertoOrigen) )
+                            msg = "REGISTRO EXITOSO";
+                        else
+                            msg = "REGISTRO FALLIDO";
+
+                        mensaje.setMensaje(msg);
                     }
 
                     this.vistaServidor.muestraMensaje("ORIGEN: " + ipOrigen + " => DESTINO: " + ipDestino + " :\n" + msg + "\n\n");
@@ -99,8 +103,6 @@ public class Servidor implements Runnable, Recepcion, Emision {
                     ObjectOutputStream out = new ObjectOutputStream(this.conexion.getSocket().getOutputStream());
 
                     out.writeObject(mensaje);
-
-                    this.conexion.cerrarConexion();
                 }
 
                 this.conexion.cerrarConexion();
@@ -113,12 +115,31 @@ public class Servidor implements Runnable, Recepcion, Emision {
 
     }
 
-    public void registrar( String IP, Integer puerto ) {
-        this.registro.put( IP, puerto );
-    }
-
     @Override
     public void enviaMensaje(String msg) {
+
+    }
+
+    public boolean registrarCliente(String ipOrigen, int puertoOrigen) {
+
+        boolean existeRegistro = false;
+
+        for (Map.Entry<String, Integer> entry : this.registro.entrySet()) {
+            if( entry.getKey().equalsIgnoreCase(ipOrigen) && entry.getValue() == puertoOrigen) {
+                existeRegistro = true;
+                break;
+            }
+        }
+
+        if( existeRegistro ){
+            return false;
+        }else{
+            this.registro.put(ipOrigen, puertoOrigen);
+            this.vistaServidor.muestraMensaje("REGISTRO: " + ipOrigen + " | " + puertoOrigen + "\n\n");
+
+            return true;
+
+        }
 
     }
 
