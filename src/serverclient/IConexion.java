@@ -1,5 +1,6 @@
 package serverclient;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -13,7 +14,7 @@ public interface IConexion {
 
     public void cerrarServer();
 
-    public void crearConexionEnvio(Object... args);
+    public void crearConexionEnvio(Object... args) throws IOException;
 
     public ObjectInputStream getInputStreamConexion();
 

@@ -6,9 +6,11 @@ import vista.vistas.VistaSesionLlamada;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 
-public class ControladorSesionLlamada implements ActionListener {
+public class ControladorSesionLlamada implements ActionListener, WindowListener {
 
     private static ControladorSesionLlamada controladorSesionLlamada = null;
 
@@ -17,6 +19,7 @@ public class ControladorSesionLlamada implements ActionListener {
     private ControladorSesionLlamada() {
         this.vista = new VistaSesionLlamada();
         this.vista.setActionListener(this);
+        this.vista.setWindowListener(this);
     }
 
     public static ControladorSesionLlamada get(boolean mostrar){
@@ -26,6 +29,7 @@ public class ControladorSesionLlamada implements ActionListener {
 
         if( mostrar ){
             controladorSesionLlamada.vista.mostrar();
+            controladorSesionLlamada.actualizarTitulo(Cliente.getCliente().getIpOrigen(), Cliente.getCliente().getPuertoOrigen());
         }
 
         return controladorSesionLlamada;
@@ -71,4 +75,41 @@ public class ControladorSesionLlamada implements ActionListener {
         }
     }
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        Cliente.getCliente().enviaMensaje("DESCONECTAR");
+        this.esconderVista();
+        this.borrarHistorial();
+        ControladorInicioNuevo.get(true).limpiarCampos();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
 }

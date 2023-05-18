@@ -6,10 +6,12 @@ import vista.vistas.VistaInicio;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class ControladorInicioNuevo implements ActionListener {
+public class ControladorInicioNuevo implements ActionListener, WindowListener {
 
     private static ControladorInicioNuevo controladorInicio = null;
 
@@ -23,13 +25,15 @@ public class ControladorInicioNuevo implements ActionListener {
     private ControladorInicioNuevo() {
         this.vista = new VistaInicio();
         this.vista.setActionListener(this);
+        this.vista.setWindowListener(this);
     }
 
     public void startCliente() {
         this.cliente = Cliente.getCliente();
-        //TODO: Debemos obtener el puerto y la IP del servidor de otro lado, no hardcodearlo
+
         this.cliente.setPuertoServidor(9090);
         this.cliente.setIpServer("localhost");
+
         this.cliente.setPuertoOrigen(miPuerto); //Lo seteo para evitar problemas en el ServerSocket en el run()
 
         this.hiloCliente = new Thread(this.cliente);
@@ -106,7 +110,11 @@ public class ControladorInicioNuevo implements ActionListener {
         }
 
     }
-    
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
     public void setMiPuerto(int puerto) {
     	this.miPuerto = puerto;
         actualizarTituloVista();
@@ -132,4 +140,39 @@ public class ControladorInicioNuevo implements ActionListener {
       //      this.vista.deshabilitarBotonConexion();
     }
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        this.cliente.enviaMensaje("ELIMINA REGISTRO");
+        System.exit(0);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
 }

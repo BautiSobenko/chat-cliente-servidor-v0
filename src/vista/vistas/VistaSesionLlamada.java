@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 
 public class VistaSesionLlamada extends JFrame implements IVistaSesionLlamada {
 
@@ -41,7 +42,7 @@ public class VistaSesionLlamada extends JFrame implements IVistaSesionLlamada {
 	 */
 	public VistaSesionLlamada() {
 		setTitle("Sesion");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 608, 383);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,6 +74,11 @@ public class VistaSesionLlamada extends JFrame implements IVistaSesionLlamada {
 	public void setActionListener(ActionListener controlador) {
 		this.btnEnviar.addActionListener(controlador);
 		this.btnDesconectar.addActionListener(controlador);
+	}
+
+	@Override
+	public void setWindowListener(WindowListener controlador) {
+		this.addWindowListener(controlador);
 	}
 
 	@Override

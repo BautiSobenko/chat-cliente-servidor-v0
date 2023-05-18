@@ -69,14 +69,11 @@ public class Conexion implements IConexion {
     }
 
     @Override
-    public void crearConexionEnvio(Object... args) {
+    public void crearConexionEnvio(Object... args) throws IOException {
         String ipServer = (String) args[0];
         int puertoServidor = (int) args[1];
-        try {
-            this.socket = new Socket(ipServer,puertoServidor);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.socket = new Socket(ipServer,puertoServidor);
+
     }
 
     public int getPuertoOrigen() {

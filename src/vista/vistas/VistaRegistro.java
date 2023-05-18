@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 
 public class VistaRegistro extends JFrame implements IVistaConfiguracion {
 
@@ -78,6 +79,11 @@ public class VistaRegistro extends JFrame implements IVistaConfiguracion {
 	@Override
 	public void setActionListener(ActionListener controlador) {
 		this.btnRegistrar.addActionListener(controlador);
+	}
+
+	@Override
+	public void setWindowListener(WindowListener controlador) {
+
 	}
 
 	@Override

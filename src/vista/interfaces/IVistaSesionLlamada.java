@@ -1,10 +1,13 @@
 package vista.interfaces;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 
 public interface IVistaSesionLlamada {
 
     public void setActionListener(ActionListener controlador);
+    void setWindowListener(WindowListener controlador);
+
     public void mostrar();
     public void esconder();
     String getMensaje();

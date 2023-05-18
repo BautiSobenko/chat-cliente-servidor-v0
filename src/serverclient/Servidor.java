@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class Servidor implements Runnable, Recepcion, Emision {
@@ -16,7 +15,7 @@ public class Servidor implements Runnable, Recepcion, Emision {
     private int puertoServer;
     private static Servidor servidor = null;
     private VistaServidor vistaServidor;
-    private HashSet<String> conexiones;
+    private HashMap<String, Integer> conexiones;
 
     private HashMap<String, Integer> registro;
 
@@ -26,7 +25,7 @@ public class Servidor implements Runnable, Recepcion, Emision {
         this.puertoServer = 9090; //Si no lo seteo antes, se rompe, intenta abrir ServerSocket con puerto des escucha null
         this.vistaServidor = new VistaServidor();
 
-        conexiones = new HashSet<>();
+        conexiones = new HashMap<>();
         registro = new HashMap<>();
 
         Thread hiloServer = new Thread(this);
@@ -46,6 +45,8 @@ public class Servidor implements Runnable, Recepcion, Emision {
     @Override
     public void run() {
 
+        String ipOrigen = null;
+        int puertoOrigen = 0;
         try {
 
             this.conexion = new Conexion();
@@ -55,9 +56,9 @@ public class Servidor implements Runnable, Recepcion, Emision {
 
             this.vistaServidor.muestraMensaje("Servidor Iniciado! \nPuerto: " + this.puertoServer + "\n");
 
-            String ipOrigen, ipDestino, msg;
+            String ipDestino;
+            String msg;
             int puertoDestino;
-            int puertoOrigen;
             Mensaje mensaje;
 
             while (true) {
@@ -73,21 +74,22 @@ public class Servidor implements Runnable, Recepcion, Emision {
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                if( msg.equalsIgnoreCase("LLAMADA") && this.conexiones.contains(ipDestino) )
+                if (msg.equalsIgnoreCase("LLAMADA") && verificaConexion(ipDestino, puertoDestino))
                     ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
-                else{
+                else if( msg.equals("ELIMINA REGISTRO") ) {
+                    this.registro.remove(ipOrigen);
+                    this.vistaServidor.muestraMensaje("BAJA CLIENTE: " + ipOrigen + " | " + puertoOrigen + "\n\n");
+                }else {
 
-                    if( msg.equalsIgnoreCase("LLAMADA ACEPTADA") ){
-                        this.conexiones.add(ipOrigen);
-                        this.conexiones.add(ipDestino);
-                    }
-                    else if( msg.equalsIgnoreCase("DESCONECTAR") ){
+                    if (msg.equalsIgnoreCase("LLAMADA ACEPTADA")) {
+                        this.conexiones.put(ipOrigen, puertoOrigen);
+                        this.conexiones.put(ipDestino, puertoDestino);
+                    } else if (msg.equalsIgnoreCase("DESCONECTAR")) {
                         this.conexiones.remove(ipOrigen);
                         this.conexiones.remove(ipDestino);
-                    }
-                    else if( msg.equalsIgnoreCase("REGISTRO") ) {
+                    } else if (msg.equalsIgnoreCase("REGISTRO")) {
 
-                        if( this.registrarCliente(ipOrigen, puertoOrigen) )
+                        if (this.registrarCliente(ipOrigen, puertoOrigen))
                             msg = "REGISTRO EXITOSO";
                         else
                             msg = "REGISTRO FALLIDO";
@@ -110,7 +112,26 @@ public class Servidor implements Runnable, Recepcion, Emision {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            try {
+
+                Mensaje mensaje = new Mensaje();
+                mensaje.setMensaje("ERROR LLAMADA");
+
+                this.conexion.crearConexionEnvio(ipOrigen, puertoOrigen);
+
+                ObjectOutputStream out = new ObjectOutputStream(this.conexion.getSocket().getOutputStream());
+                out.writeObject(mensaje);
+
+                this.vistaServidor.muestraMensaje("ERROR EN CONEXION: " + ipOrigen + " | " + puertoOrigen + "\n\n");
+
+                this.conexion.cerrarConexion();
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
         }
 
     }
@@ -118,6 +139,19 @@ public class Servidor implements Runnable, Recepcion, Emision {
     @Override
     public void enviaMensaje(String msg) {
 
+    }
+
+    public boolean verificaConexion(String ipDestino, int puertoDestino) {
+        boolean conexionExistente = false;
+
+        for (Map.Entry<String, Integer> entry : this.conexiones.entrySet()) {
+            if( entry.getKey().equalsIgnoreCase(ipDestino) && entry.getValue() == puertoDestino) {
+                conexionExistente = true;
+                break;
+            }
+        }
+
+        return conexionExistente;
     }
 
     public boolean registrarCliente(String ipOrigen, int puertoOrigen) {

@@ -58,7 +58,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
             mensaje.setIpOrigen(this.ipOrigen);
 
 
-            if( msg.equals("REGISTRO") ) {
+            if( msg.equals("REGISTRO")  || msg.equals("ELIMINA REGISTRO") ) {
                 mensaje.setIpDestino(this.ipOrigen);
                 mensaje.setPuertoDestino(this.puertoOrigen);
             }else {
@@ -73,7 +73,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
             }
 
             //Los mensajes de "Control" no debo cifrarlos
-            if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") || msg.equals("REGISTRO") ) {
+            if( msg.equals("LLAMADA") || msg.equals("DESCONECTAR") || msg.equals("REGISTRO") || msg.equals("ELIMINA REGISTRO") ) {
                 mensaje.setMensaje(msg);
 
                 if (msg.equals("LLAMADA"))
@@ -176,6 +176,10 @@ public class Cliente implements Runnable,Emision,Recepcion {
                 else if (txt.equalsIgnoreCase("REGISTRO FALLIDO")) {
                     ControladorRegistro.get(false).registroCliente(false);
                 }
+                else if (txt.equalsIgnoreCase("ERROR LLAMADA")) {
+                    System.out.println("Error llamada");
+                    ControladorInicioNuevo.get(true).error("Error en la conexion");
+                }
                 else {
                     String mensajeDesencriptado = this.rsa.desencriptar(txt); //Lo desencripto con mi clave privada. El extremo encripto con mi clave publica (enviada)
                     ControladorSesionLlamada.get(false).muestraMensaje(ipD + ": " + mensajeDesencriptado);
@@ -224,6 +228,25 @@ public class Cliente implements Runnable,Emision,Recepcion {
         this.ipOrigen = ipOrigen;
     }
 
+    public String getIpServer() {
+        return ipServer;
+    }
+
+    public int getPuertoDestino() {
+        return puertoDestino;
+    }
+
+    public int getPuertoOrigen() {
+        return puertoOrigen;
+    }
+
+    public String getIpDestino() {
+        return ipDestino;
+    }
+
+    public String getIpOrigen() {
+        return ipOrigen;
+    }
 
     @Override
     public Mensaje recibeMensaje() {

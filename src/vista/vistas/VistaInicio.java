@@ -1,7 +1,6 @@
 package vista.vistas;
 
 import vista.interfaces.IVistaInicio;
-import configuracion.Configuracion;
 
 import java.awt.EventQueue;
 
@@ -13,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -102,7 +102,11 @@ public class VistaInicio extends JFrame implements IVistaInicio {
 	public void setActionListener(ActionListener controlador) {
 		this.btnConfiguracion.addActionListener(controlador);
 		this.btnConectar.addActionListener(controlador);
+	}
 
+	@Override
+	public void setWindowListener(WindowListener controlador) {
+		this.addWindowListener(controlador);
 	}
 
 	@Override

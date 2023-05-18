@@ -2,6 +2,8 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.net.UnknownHostException;
 
 import configuracion.ConfiguracionCliente;
@@ -10,7 +12,7 @@ import configuracion.Configuracion;
 import vista.vistas.VistaConfiguracionPuerto;
 
 
-public class ControladorConfiguracion implements ActionListener{
+public class ControladorConfiguracion implements ActionListener, WindowListener {
 
 	private static ControladorConfiguracion controladorConfiguracion = null;
 
@@ -19,6 +21,7 @@ public class ControladorConfiguracion implements ActionListener{
 	private ControladorConfiguracion() {
 		this.vista = new VistaConfiguracionPuerto();
 		this.vista.setActionListener(this);
+		this.vista.setWindowListener(this);
 	}
 
     public static ControladorConfiguracion get(boolean mostrar){
@@ -71,4 +74,38 @@ public class ControladorConfiguracion implements ActionListener{
 		}
 	}
 
+	@Override
+	public void windowOpened(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		ControladorInicioNuevo.get(true);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+
+	}
 }
