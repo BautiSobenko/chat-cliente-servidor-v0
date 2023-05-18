@@ -97,7 +97,7 @@ public class ControladorInicioNuevo implements ActionListener {
                         this.lanzarAviso("Esperando a ser atendido...");
 
                     }catch (Exception exception){
-                        exception.printStackTrace();
+                        this.vista.error("Error en la conexion");
 	                }
                 }
                 else
