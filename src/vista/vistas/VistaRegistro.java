@@ -108,10 +108,15 @@ public class VistaRegistro extends JFrame implements IVistaConfiguracion {
 
 	@Override
 	public void lanzarVentanaEmergente(String mensaje) {
-		JOptionPane.showMessageDialog(this, mensaje);
+		JOptionPane.showMessageDialog(this, mensaje,"Error en Conexion", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void setLblDireccionIP(String direccionIP) {
 		this.lblDireccionIP.setText(direccionIP);
+	}
+
+	@Override
+	public void setTxtPuerto(String puerto) {
+
 	}
 }

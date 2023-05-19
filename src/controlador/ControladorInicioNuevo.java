@@ -1,5 +1,7 @@
 package controlador;
 
+import configuracion.ConfiguracionCliente;
+import configuracion.ConfiguracionServer;
 import serverclient.Cliente;
 import vista.interfaces.IVistaInicio;
 import vista.vistas.VistaInicio;
@@ -20,8 +22,6 @@ public class ControladorInicioNuevo implements ActionListener, WindowListener {
     private int miPuerto;
     private Thread hiloCliente;
 
-    private ControladorSesionLlamada controladorSesionLlamada;
-
     private ControladorInicioNuevo() {
         this.vista = new VistaInicio();
         this.vista.setActionListener(this);
@@ -31,8 +31,8 @@ public class ControladorInicioNuevo implements ActionListener, WindowListener {
     public void startCliente() {
         this.cliente = Cliente.getCliente();
 
-        this.cliente.setPuertoServidor(9090);
-        this.cliente.setIpServer("localhost");
+        this.cliente.setPuertoServidor(ConfiguracionServer.getConfig().getPuerto());
+        this.cliente.setIpServer(ConfiguracionServer.getConfig().getIp());
 
         this.cliente.setPuertoOrigen(miPuerto); //Lo seteo para evitar problemas en el ServerSocket en el run()
 
@@ -147,8 +147,13 @@ public class ControladorInicioNuevo implements ActionListener, WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        this.cliente.enviaMensaje("ELIMINA REGISTRO");
-        System.exit(0);
+        try {
+            this.cliente.enviaMensaje("ELIMINA REGISTRO");
+            System.exit(0);
+        }
+        catch(Exception i) {
+            System.exit(0);
+        }
     }
 
     @Override

@@ -29,8 +29,10 @@ public class ControladorConfiguracion implements ActionListener, WindowListener 
 			controladorConfiguracion = new ControladorConfiguracion();
 		}
 
-		if( mostrar )
+		if( mostrar ){
 			controladorConfiguracion.vista.mostrar();
+			controladorConfiguracion.vista.setTxtPuerto(String.valueOf(ConfiguracionCliente.getConfig().getParametros()[1]));
+		}
 
 		return controladorConfiguracion;
     }
@@ -52,6 +54,9 @@ public class ControladorConfiguracion implements ActionListener, WindowListener 
 
 				if (configuracion.validarConfiguracion()){
 
+					configuracion.setIp(IP);
+					configuracion.setPuerto(miPuerto);
+
 					configuracion.escribirArchivoConfiguracion();
 
 					controladorInicio.setMiPuerto(miPuerto);
@@ -59,11 +64,11 @@ public class ControladorConfiguracion implements ActionListener, WindowListener 
 					controladorInicio.verificarBoton();
 
 					this.vista.esconder();
-				}
-				else{
+				} else
 					vista.lanzarVentanaEmergente("Error al ingresar IP o Puerto");
-				}
-			}
+
+			} else
+				this.vista.esconder();
 
 		}catch (RuntimeException exception){
 			vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");

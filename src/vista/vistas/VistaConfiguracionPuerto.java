@@ -88,6 +88,10 @@ public class VistaConfiguracionPuerto extends JFrame implements IVistaConfigurac
 		this.setVisible(true);
 	}
 
+	public void setTxtPuerto(String puerto) {
+		this.txtPuerto.setText(puerto);
+	}
+
 	@Override
 	public void esconder() {
 		this.setVisible(false);

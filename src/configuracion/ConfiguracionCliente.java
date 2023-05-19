@@ -36,4 +36,7 @@ public class ConfiguracionCliente extends Configuracion{
         this.setPuerto(1500);
         super.leerArchivo(path);
     }
+
+
+
 }

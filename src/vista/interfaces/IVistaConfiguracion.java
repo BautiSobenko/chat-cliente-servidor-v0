@@ -13,4 +13,5 @@ public interface IVistaConfiguracion {
 	public void esconder();
 	void lanzarVentanaEmergente(String mensaje);
 	void setLblDireccionIP(String direccionIP);
+	public void setTxtPuerto(String puerto);
 }

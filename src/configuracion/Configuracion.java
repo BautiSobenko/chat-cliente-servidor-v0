@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.io.*;
 
 public abstract class Configuracion implements Configurar{
+
     private String ip;
     private int puerto;
 
@@ -97,4 +98,5 @@ public abstract class Configuracion implements Configurar{
             throw new Exception(e);
         }
     }
+
 }

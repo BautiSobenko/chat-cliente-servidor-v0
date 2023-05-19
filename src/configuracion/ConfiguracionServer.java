@@ -17,7 +17,7 @@ public class ConfiguracionServer extends Configuracion{
     }
 
     public static ConfiguracionServer getConfig(){
-        if (config==null)
+        if (config == null)
             config = new ConfiguracionServer();
         return config;
     }

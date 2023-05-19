@@ -1,5 +1,6 @@
 package serverclient;
 
+import configuracion.ConfiguracionServer;
 import controlador.ControladorInicioNuevo;
 import mensaje.Mensaje;
 import vista.vistas.VistaServidor;
@@ -22,7 +23,8 @@ public class Servidor implements Runnable, Recepcion, Emision {
     private Conexion conexion;
 
     private Servidor(){
-        this.puertoServer = 9090; //Si no lo seteo antes, se rompe, intenta abrir ServerSocket con puerto des escucha null
+
+        this.puertoServer = ConfiguracionServer.getConfig().getPuerto();
         this.vistaServidor = new VistaServidor();
 
         conexiones = new HashMap<>();

@@ -91,7 +91,7 @@ public class Cliente implements Runnable,Emision,Recepcion {
             conexion.cerrarConexion();
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ControladorRegistro.get(false).aviso("No se pudo establecer conexion con el Servidor");
         }
 
     }
@@ -134,10 +134,10 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
     @Override
     public void run() {
+        String ipD, ipO, txt = null;
         try {
             this.conexion.establecerConexion(this.puertoOrigen);
 
-            String ipD, ipO, txt;
             Mensaje mensajeRecibido;
 
             while (true) {
@@ -189,8 +189,8 @@ public class Cliente implements Runnable,Emision,Recepcion {
 
             }
 
-        } catch (Exception e) {
-            ControladorRegistro.get(false).aviso("El puerto ingresado ya esta en uso");
+        } catch (Exception ignored) {
+
         }
 
 

@@ -57,6 +57,9 @@ public class ControladorRegistro implements ActionListener {
 
                 if ( configuracion.validarConfiguracion() ) {
 
+                    configuracion.setIp(IP);
+                    configuracion.setPuerto(miPuerto);
+
                     configuracion.escribirArchivoConfiguracion();
 
                     controladorInicio.setMiPuerto(miPuerto);
@@ -69,6 +72,7 @@ public class ControladorRegistro implements ActionListener {
 
             }catch (RuntimeException exception){
                 vista.lanzarVentanaEmergente("El puerto ingresado ya esta en uso");
+
             }catch (UnknownHostException ignored){
 
             } catch (Exception ex) {
