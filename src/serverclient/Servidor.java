@@ -1,7 +1,6 @@
 package serverclient;
 
 import configuracion.ConfiguracionServer;
-import controlador.ControladorInicioNuevo;
 import mensaje.Mensaje;
 import vista.vistas.VistaServidor;
 
@@ -16,15 +15,15 @@ public class Servidor implements Runnable, Recepcion, Emision {
     private int puertoServer;
     private static Servidor servidor = null;
     private VistaServidor vistaServidor;
-    private HashMap<String, Integer> conexiones;
+    private HashMap<Integer, String> conexiones;
 
-    private HashMap<String, Integer> registro;
+    private HashMap<Integer, String> registro;
 
     private Conexion conexion;
 
     private Servidor(){
 
-        this.puertoServer = ConfiguracionServer.getConfig().getPuerto();
+        this.puertoServer = Integer.parseInt(ConfiguracionServer.getConfig().getParametros()[1]);
         this.vistaServidor = new VistaServidor();
 
         conexiones = new HashMap<>();
@@ -76,19 +75,17 @@ public class Servidor implements Runnable, Recepcion, Emision {
                 ipDestino = mensaje.getIpDestino();
                 msg = mensaje.getMensaje();
 
-                if (msg.equalsIgnoreCase("LLAMADA") && verificaConexion(ipDestino, puertoDestino))
-                    ControladorInicioNuevo.get(false).error("No es posible conectar. Ocupado");
-                else if( msg.equals("ELIMINA REGISTRO") ) {
+                if( msg.equals("ELIMINA REGISTRO") ) {
                     this.registro.remove(ipOrigen);
                     this.vistaServidor.muestraMensaje("BAJA CLIENTE: " + ipOrigen + " | " + puertoOrigen + "\n\n");
                 }else {
 
                     if (msg.equalsIgnoreCase("LLAMADA ACEPTADA")) {
-                        this.conexiones.put(ipOrigen, puertoOrigen);
-                        this.conexiones.put(ipDestino, puertoDestino);
+                        this.conexiones.put(puertoOrigen, ipOrigen);
+                        this.conexiones.put(puertoDestino, ipDestino);
                     } else if (msg.equalsIgnoreCase("DESCONECTAR")) {
-                        this.conexiones.remove(ipOrigen);
-                        this.conexiones.remove(ipDestino);
+                        this.conexiones.remove(puertoOrigen);
+                        this.conexiones.remove(puertoDestino);
                     } else if (msg.equalsIgnoreCase("REGISTRO")) {
 
                         if (this.registrarCliente(ipOrigen, puertoOrigen))
@@ -96,6 +93,9 @@ public class Servidor implements Runnable, Recepcion, Emision {
                         else
                             msg = "REGISTRO FALLIDO";
 
+                        mensaje.setMensaje(msg);
+                    }else if( (msg.equalsIgnoreCase("LLAMADA") && verificaConexion(ipDestino, puertoDestino)) ){
+                        msg = "OCUPADO";
                         mensaje.setMensaje(msg);
                     }
 
@@ -146,8 +146,8 @@ public class Servidor implements Runnable, Recepcion, Emision {
     public boolean verificaConexion(String ipDestino, int puertoDestino) {
         boolean conexionExistente = false;
 
-        for (Map.Entry<String, Integer> entry : this.conexiones.entrySet()) {
-            if( entry.getKey().equalsIgnoreCase(ipDestino) && entry.getValue() == puertoDestino) {
+        for (Map.Entry<Integer, String> entry : this.conexiones.entrySet()) {
+            if( entry.getValue().equalsIgnoreCase(ipDestino) && entry.getKey() == puertoDestino) {
                 conexionExistente = true;
                 break;
             }
@@ -160,8 +160,8 @@ public class Servidor implements Runnable, Recepcion, Emision {
 
         boolean existeRegistro = false;
 
-        for (Map.Entry<String, Integer> entry : this.registro.entrySet()) {
-            if( entry.getKey().equalsIgnoreCase(ipOrigen) && entry.getValue() == puertoOrigen) {
+        for (Map.Entry<Integer, String> entry : this.registro.entrySet()) {
+            if( entry.getValue().equalsIgnoreCase(ipOrigen) && entry.getKey() == puertoOrigen) {
                 existeRegistro = true;
                 break;
             }
@@ -170,7 +170,7 @@ public class Servidor implements Runnable, Recepcion, Emision {
         if( existeRegistro ){
             return false;
         }else{
-            this.registro.put(ipOrigen, puertoOrigen);
+            this.registro.put(puertoOrigen, ipOrigen);
             this.vistaServidor.muestraMensaje("REGISTRO: " + ipOrigen + " | " + puertoOrigen + "\n\n");
 
             return true;

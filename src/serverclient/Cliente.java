@@ -150,6 +150,8 @@ public class Cliente implements Runnable,Emision,Recepcion {
                 ipO = mensajeRecibido.getIpOrigen();
                 ipD = mensajeRecibido.getIpDestino();
 
+                System.out.println(txt);
+
                 if (txt.equalsIgnoreCase("LLAMADA")) {
                     ControladorRecepcionLlamada controladorRecepcionLlamada = ControladorRecepcionLlamada.get(false);
                     controladorRecepcionLlamada.setIpOrigen(ipD);
@@ -179,6 +181,9 @@ public class Cliente implements Runnable,Emision,Recepcion {
                 else if (txt.equalsIgnoreCase("ERROR LLAMADA")) {
                     System.out.println("Error llamada");
                     ControladorInicioNuevo.get(true).error("Error en la conexion");
+                }
+                else if( txt.equalsIgnoreCase("OCUPADO" ) ){
+                    ControladorInicioNuevo.get(true).error("El usuario al que intenta llamar se encuentra Ocupado");
                 }
                 else {
                     String mensajeDesencriptado = this.rsa.desencriptar(txt); //Lo desencripto con mi clave privada. El extremo encripto con mi clave publica (enviada)
