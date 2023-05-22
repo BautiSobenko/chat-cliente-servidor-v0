@@ -1,5 +1,6 @@
 package servidor;
 
+import conexion.Conexion;
 import configuracion.ConfiguracionServer;
 import mensaje.Mensaje;
 import vista.vistas.VistaServidor;

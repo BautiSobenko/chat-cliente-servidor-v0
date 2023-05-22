@@ -1,5 +1,6 @@
 package cliente;
 
+import conexion.Conexion;
 import controlador.ControladorInicio;
 import controlador.ControladorRecepcionLlamada;
 import controlador.ControladorRegistro;

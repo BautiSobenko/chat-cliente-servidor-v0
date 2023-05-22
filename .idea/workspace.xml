@@ -1,61 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="3fd63e86-9717-419f-bdd6-561179abd0f6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Client/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/artifacts/Client_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/Client.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/Server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/chat_tcp_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-tcp.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configuracion/Configuracion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configuracion/ConfiguracionCliente.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configuracion/ConfiguracionServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configuracion/Configurar.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlador/ControladorConfiguracion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlador/ControladorInicioNuevo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlador/ControladorRecepcionLlamada.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlador/ControladorRegistro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controlador/ControladorSesionLlamada.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/encriptacion/Encriptacion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/encriptacion/RSA.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/MainCliente.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/MainServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mensaje/Mensaje.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/Cliente.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/Conexion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/Emision.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/IConexion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/Recepcion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/serverclient/Servidor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/interfaces/IVistaConfiguracion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/interfaces/IVistaInicio.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/interfaces/IVistaRecepcionLlamada.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/interfaces/IVistaSesionLlamada.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaConfiguracionPuerto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaInicio.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaRecepcionLlamada.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaRegistro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaServidor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vista/vistas/VistaSesionLlamada.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Server" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -74,18 +24,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -95,6 +45,7 @@
       <option name="presentableId" value="Default" />
       <updated>1684542714301</updated>
       <workItem from="1684542715652" duration="322000" />
+      <workItem from="1684782293273" duration="819000" />
     </task>
     <servers />
   </component>
